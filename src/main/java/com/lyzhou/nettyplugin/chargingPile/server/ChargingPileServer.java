@@ -1,7 +1,7 @@
-package com.lyzhou.nettyplugin.waterGauge.server;
+package com.lyzhou.nettyplugin.chargingPile.server;
 
-import com.lyzhou.nettyplugin.waterGauge.codec.WaterGaugeEncoder;
-import com.lyzhou.nettyplugin.waterGauge.handler.WaterGaugeRespHandler;
+import com.lyzhou.nettyplugin.chargingPile.codec.ChargingPileEncoder;
+import com.lyzhou.nettyplugin.chargingPile.handler.ChargingPileStartRespHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -13,7 +13,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 
-public class WaterGaugeServer {
+public class ChargingPileServer {
 
     public void bind(int port) throws InterruptedException {
         EventLoopGroup bossGroup = new NioEventLoopGroup();
@@ -27,8 +27,8 @@ public class WaterGaugeServer {
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
-                            socketChannel.pipeline().addLast(new WaterGaugeEncoder());
-                            socketChannel.pipeline().addLast(new WaterGaugeRespHandler());
+                            socketChannel.pipeline().addLast(new ChargingPileEncoder());
+                            socketChannel.pipeline().addLast(new ChargingPileStartRespHandler());
                         }
                     });
             //绑定端口，同步等待成功
@@ -51,6 +51,6 @@ public class WaterGaugeServer {
 
             }
         }
-        new WaterGaugeServer().bind(port);
+        new ChargingPileServer().bind(port);
     }
 }

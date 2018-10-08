@@ -1,4 +1,4 @@
-package com.lyzhou.nettyplugin.waterGauge.handelr;
+package com.lyzhou.nettyplugin.waterGauge.handler;
 
 import com.lyzhou.nettyplugin.waterGauge.domain.WaterGaugeMessage;
 import io.netty.channel.ChannelHandler;
