@@ -9,7 +9,6 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.util.ReferenceCountUtil;
 
 
 /**
@@ -42,17 +41,6 @@ public class ChargingPileHandler extends SimpleChannelInboundHandler<ChargingPil
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, ChargingPileMessage message) throws Exception {
         System.out.println(getMessage(message));
-        switch (ChargingPileEnum.getByValue(message.getType())){
-            case STOP:
-                ChargingPileStop stop = (ChargingPileStop) message.getBody();
-                if(stop.getResult().equals("结束成功")){
-                    ctx.writeAndFlush(STOP_RESP_SUCCESS);
-                }else {
-                    ctx.writeAndFlush(STOP_RESP_ERROR);
-                }
-                break;
-        }
-
     }
 
     @Override
