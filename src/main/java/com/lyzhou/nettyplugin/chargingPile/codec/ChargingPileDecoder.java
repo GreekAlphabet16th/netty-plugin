@@ -24,7 +24,6 @@ public class ChargingPileDecoder extends ByteToMessageDecoder {
             LOGGER.debug("parse ChargingPileMessage... try parse...");
         }
 
-        int tst = in.readableBytes();
         ChargingPileMessage message = new ChargingPileMessage();
         //消息起始头
         if(message.getHead() == in.readInt()){
