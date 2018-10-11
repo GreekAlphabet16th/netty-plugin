@@ -2,7 +2,7 @@ package com.lyzhou.nettyplugin.chargingPile.domain;
 
 import java.io.Serializable;
 
-public class ChargingPileMessage implements Serializable {
+public class ChargingPileMessage<T> implements Serializable {
     private static final long serialVersionUID = 5858325998083370402L;
     //消息起始头
     private int head = 0xade635de;
@@ -11,7 +11,7 @@ public class ChargingPileMessage implements Serializable {
     //消息体长度
     private short bodyLength;
     //消息体
-    private Object body;
+    private T body;
 
     public int getHead() {
         return head;
@@ -37,11 +37,11 @@ public class ChargingPileMessage implements Serializable {
         this.bodyLength = bodyLength;
     }
 
-    public Object getBody() {
+    public T getBody() {
         return body;
     }
 
-    public void setBody(Object body) {
+    public void setBody(T body) {
         this.body = body;
     }
 

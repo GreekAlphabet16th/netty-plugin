@@ -10,10 +10,9 @@ import io.netty.handler.codec.MessageToByteEncoder;
  * */
 public class ChargingPileEncoder extends MessageToByteEncoder<byte[]> {
 
-
     @Override
-    protected void encode(ChannelHandlerContext ctx, byte[] bytes, ByteBuf byteBuf) throws Exception {
+    protected void encode(ChannelHandlerContext ctx, byte[] bytes, ByteBuf out) throws Exception {
         System.out.println("ChargingPileEncoder msg......");
-        byteBuf.writeBytes(bytes);
+        out.writeBytes(bytes);
     }
 }

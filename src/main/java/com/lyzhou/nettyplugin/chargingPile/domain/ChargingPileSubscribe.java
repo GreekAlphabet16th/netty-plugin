@@ -3,8 +3,8 @@ package com.lyzhou.nettyplugin.chargingPile.domain;
 import java.io.Serializable;
 
 public class ChargingPileSubscribe implements Serializable {
-    private static final long serialVersionUID = -6277359440151358156L;
 
+    private static final long serialVersionUID = 7962760576587464065L;
     private String deviceID;
 
     private String result;

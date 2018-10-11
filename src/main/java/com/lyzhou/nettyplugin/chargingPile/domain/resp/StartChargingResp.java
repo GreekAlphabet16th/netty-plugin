@@ -1,12 +1,12 @@
-package com.lyzhou.nettyplugin.chargingPile.domain;
+package com.lyzhou.nettyplugin.chargingPile.domain.resp;
 
 import java.io.Serializable;
 
-public class ChargingPileStart implements Serializable {
-    private static final long serialVersionUID = -6277359440151358156L;
+public class StartChargingResp implements Serializable {
+
+    private static final long serialVersionUID = 8429390526692475775L;
 
     private String deviceID;
-
     private String result;
 
     public String getDeviceID() {
@@ -27,7 +27,7 @@ public class ChargingPileStart implements Serializable {
 
     @Override
     public String toString() {
-        return "ChargingPileStart{" +
+        return "StartChargingResp{" +
                 "deviceID='" + deviceID + '\'' +
                 ", result='" + result + '\'' +
                 '}';

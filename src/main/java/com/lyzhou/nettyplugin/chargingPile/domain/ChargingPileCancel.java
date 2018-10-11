@@ -3,8 +3,8 @@ package com.lyzhou.nettyplugin.chargingPile.domain;
 import java.io.Serializable;
 
 public class ChargingPileCancel implements Serializable {
-    private static final long serialVersionUID = -6277359440151358156L;
 
+    private static final long serialVersionUID = -1005985480741544334L;
     private String deviceID;
 
     private String result;

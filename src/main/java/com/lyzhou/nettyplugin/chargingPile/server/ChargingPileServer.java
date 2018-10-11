@@ -1,7 +1,10 @@
 package com.lyzhou.nettyplugin.chargingPile.server;
 
+import com.lyzhou.nettyplugin.chargingPile.codec.ChargingPileDecoder;
 import com.lyzhou.nettyplugin.chargingPile.codec.ChargingPileEncoder;
-import com.lyzhou.nettyplugin.chargingPile.handler.ChargingPileStartRespHandler;
+import com.lyzhou.nettyplugin.chargingPile.codec.StartChargingEncoder;
+import com.lyzhou.nettyplugin.chargingPile.handler.ChargingPileRespHandler;
+import com.lyzhou.nettyplugin.chargingPile.handler.StartChargingOutHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -27,8 +30,12 @@ public class ChargingPileServer {
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
-                            socketChannel.pipeline().addLast(new ChargingPileEncoder());
-                            socketChannel.pipeline().addLast(new ChargingPileStartRespHandler());
+                            socketChannel.pipeline().addLast(new ChargingPileEncoder());//入站：pipeline头部出发
+                            socketChannel.pipeline().addLast(new StartChargingEncoder());
+                            socketChannel.pipeline().addLast(new ChargingPileDecoder());
+                            socketChannel.pipeline().addLast(new ChargingPileRespHandler());
+                            socketChannel.pipeline().addLast(new StartChargingOutHandler());//出站：pipeline尾部出发
+                            socketChannel.pipeline().addLast(new StartChargingEncoder());
                         }
                     });
             //绑定端口，同步等待成功
@@ -43,7 +50,7 @@ public class ChargingPileServer {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        int port = 8080;
+        int port = 20508;
         if(args != null && args.length > 0){
             try {
                 port = Integer.valueOf(args[0]);

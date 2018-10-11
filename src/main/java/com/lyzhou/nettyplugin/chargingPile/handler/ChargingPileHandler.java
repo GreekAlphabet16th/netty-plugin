@@ -3,7 +3,8 @@ package com.lyzhou.nettyplugin.chargingPile.handler;
 import com.lyzhou.nettyplugin.chargingPile.domain.*;
 import com.lyzhou.nettyplugin.chargingPile.domain.enums.ChargingPileEnum;
 import com.lyzhou.nettyplugin.chargingPile.domain.enums.ChargingPileStatusEnum;
-import com.lyzhou.nettyplugin.waterGauge.utils.ByteUtil;
+import com.lyzhou.nettyplugin.chargingPile.domain.resp.StartChargingResp;
+import com.lyzhou.nettyplugin.utils.ByteUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler;
@@ -62,7 +63,7 @@ public class ChargingPileHandler extends SimpleChannelInboundHandler<ChargingPil
         buf.readBytes(deviceID);
         switch (ChargingPileEnum.getByValue(message.getType())){
             case START: {
-                ChargingPileStart start = new ChargingPileStart();
+                StartChargingResp start = new StartChargingResp();
                 start.setDeviceID(ByteUtil.bytes2HexStr(deviceID));
                 start.setResult(buf.readByte() == 0x01 ? "启动成功":"启动失败" );
                 message.setBody(start);
