@@ -37,9 +37,11 @@ public class ChargingPileServer {
                     .childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
+                            //出站用于处客户端到服务端的命令
                             socketChannel.pipeline().addLast(new ChargingPileEncoder());//入站：pipeline头部出发
                             socketChannel.pipeline().addLast(new ChargingPileDecoder());
                             socketChannel.pipeline().addLast(new ChargingPileRespHandler());
+                            //出站用于处理服务器到客户端的命令
                             socketChannel.pipeline().addLast(new StartChargingOutHandler());//出站：pipeline尾部出发
                             socketChannel.pipeline().addLast(new StartChargingEncoder());
                         }
@@ -61,12 +63,12 @@ public class ChargingPileServer {
             try {
                 port = Integer.valueOf(args[0]);
             }catch (NumberFormatException e){
-
+                e.printStackTrace();
             }
         }
         new ChargingPileServer().bind(port);
         while (true) {
-            SocketChannel channel = (SocketChannel) ChannelMap.getMap().get("10.70.1.120");
+            SocketChannel channel = (SocketChannel) ChannelMap.getMap().get("8888000100000000");
             if(channel != null){
                 ChargingPileMessage<StartChargingReq> message = new ChargingPileMessage<>();
                 StartChargingReq req = new StartChargingReq();

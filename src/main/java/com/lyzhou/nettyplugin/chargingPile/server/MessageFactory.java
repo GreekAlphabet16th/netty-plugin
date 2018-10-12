@@ -13,6 +13,7 @@ public class MessageFactory {
 
         byte[] deviceID = {0x38, 0x38, 0x38, 0x38, 0x30, 0x30, 0x30, 0x31,
                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+        //启动命令
         if(message.getBody() instanceof StartChargingReq ){
                 message.setType((byte) 0x10);
                 message.setBodyLength((short) 0x0013);

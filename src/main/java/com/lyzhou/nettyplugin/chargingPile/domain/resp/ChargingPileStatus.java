@@ -1,10 +1,11 @@
-package com.lyzhou.nettyplugin.chargingPile.domain;
+package com.lyzhou.nettyplugin.chargingPile.domain.resp;
 
 import java.io.Serializable;
 
 public class ChargingPileStatus implements Serializable {
 
     private static final long serialVersionUID = 8861760261044193720L;
+
     private String deviceID;
 
     private String status;

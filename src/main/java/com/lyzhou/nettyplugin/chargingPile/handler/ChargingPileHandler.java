@@ -3,6 +3,7 @@ package com.lyzhou.nettyplugin.chargingPile.handler;
 import com.lyzhou.nettyplugin.chargingPile.domain.*;
 import com.lyzhou.nettyplugin.chargingPile.domain.enums.ChargingPileEnum;
 import com.lyzhou.nettyplugin.chargingPile.domain.enums.ChargingPileStatusEnum;
+import com.lyzhou.nettyplugin.chargingPile.domain.resp.ChargingPileStatus;
 import com.lyzhou.nettyplugin.chargingPile.domain.resp.StartChargingResp;
 import com.lyzhou.nettyplugin.utils.ByteUtil;
 import io.netty.buffer.ByteBuf;

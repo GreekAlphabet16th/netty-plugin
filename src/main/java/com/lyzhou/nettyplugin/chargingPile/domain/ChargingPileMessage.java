@@ -3,6 +3,7 @@ package com.lyzhou.nettyplugin.chargingPile.domain;
 import java.io.Serializable;
 
 public class ChargingPileMessage<T> implements Serializable {
+
     private static final long serialVersionUID = 5858325998083370402L;
     //消息起始头
     private int head = 0xade635de;

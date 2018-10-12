@@ -2,6 +2,7 @@ package com.lyzhou.nettyplugin.chargingPile.handler;
 
 import com.lyzhou.nettyplugin.chargingPile.domain.ChannelMap;
 import com.lyzhou.nettyplugin.chargingPile.domain.ChargingPileMessage;
+import com.lyzhou.nettyplugin.chargingPile.domain.resp.ChargingPileStatus;
 import com.lyzhou.nettyplugin.chargingPile.domain.enums.ChargingPileEnum;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -15,11 +16,6 @@ public class ChargingPileRespHandler extends ChannelInboundHandlerAdapter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ChargingPileRespHandler.class);
     
-    @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        LOGGER.info("设备地址: " + ChannelMap.getRemoteAddress(ctx));
-        ChannelMap.getMap().put(ChannelMap.getIpStr(ctx), ctx.channel());
-    }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
@@ -31,6 +27,15 @@ public class ChargingPileRespHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         ChargingPileMessage message = (ChargingPileMessage) msg;
+        //存储设备终端号deviceID--channel
+        if(message.getBody() instanceof ChargingPileStatus){
+            ChargingPileStatus status = (ChargingPileStatus) message.getBody();
+            LOGGER.info("设备地址: " + ChannelMap.getRemoteAddress(ctx));
+            LOGGER.info("设备终端号: " + status.getDeviceID());
+            if(null == ChannelMap.getMap().get(status.getDeviceID())){
+                ChannelMap.getMap().put(status.getDeviceID(), ctx.channel());
+            }
+        }
         try {
             switch (ChargingPileEnum.getByValue(message.getType())){
                 case STATUS:

@@ -1,15 +1,13 @@
 package com.lyzhou.nettyplugin.chargingPile.codec;
 
 import com.lyzhou.nettyplugin.chargingPile.domain.ChargingPileMessage;
-import com.lyzhou.nettyplugin.chargingPile.domain.ChargingPileStatus;
+import com.lyzhou.nettyplugin.chargingPile.domain.resp.ChargingPileStatus;
 import com.lyzhou.nettyplugin.chargingPile.domain.enums.ChargingPileEnum;
 import com.lyzhou.nettyplugin.chargingPile.domain.enums.ChargingPileStatusEnum;
 import com.lyzhou.nettyplugin.chargingPile.domain.resp.StartChargingResp;
-import com.lyzhou.nettyplugin.utils.ByteUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
-import io.netty.util.ReferenceCountUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +37,6 @@ public class ChargingPileDecoder extends ByteToMessageDecoder {
         ChargingPileMessage message = new ChargingPileMessage();
         message.setType(buf.readByte());
         message.setBodyLength(buf.readShort());
-        //终端号？十进制：十六进制
         byte[] deviceID = new byte[16];
         buf.readBytes(deviceID);
         //消息体类型
@@ -47,8 +44,8 @@ public class ChargingPileDecoder extends ByteToMessageDecoder {
         switch (ChargingPileEnum.getByValue(type)){
             case STATUS:{
                 ChargingPileStatus status = new ChargingPileStatus();
-                //终端号：十六进制字符串
-                status.setDeviceID(ByteUtil.bytes2HexStr(deviceID));
+                //终端号：取十六进制高位字符串
+                status.setDeviceID(getDeviceID(deviceID));
                 //当前桩状态
                 status.setStatus(ChargingPileStatusEnum.getByValue(buf.readShort()));
                 //+++++++++充电信息++++++++
@@ -75,10 +72,22 @@ public class ChargingPileDecoder extends ByteToMessageDecoder {
             case START:
                 StartChargingResp start = new StartChargingResp();
                 //终端号：十六进制字符串
-                start.setDeviceID((ByteUtil.bytes2HexStr(deviceID)));
+                start.setDeviceID((getDeviceID(deviceID)));
                 start.setResult(buf.readByte() == 0x01 ? "true":"false" );
                 message.setBody(start);
         }
         return message;
+    }
+
+    /**
+     * 终端号解码
+     * */
+    private static String getDeviceID(byte[] deviceID){
+        //十进制转十六进制
+        StringBuilder sb = new StringBuilder();
+        for (byte b: deviceID) {
+            sb.append(String.format("%02X", b).substring(1));
+        }
+        return sb.toString();
     }
 }
