@@ -3,11 +3,10 @@ package com.lyzhou.nettyplugin.chargingPile.handler;
 import com.lyzhou.nettyplugin.chargingPile.domain.ChannelMap;
 import com.lyzhou.nettyplugin.chargingPile.domain.ChargingPileMessage;
 import com.lyzhou.nettyplugin.chargingPile.domain.enums.ChargingPileEnum;
-import com.lyzhou.nettyplugin.chargingPile.domain.req.StartChargingReq;
-import com.lyzhou.nettyplugin.chargingPile.server.MessageFactory;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.util.ReferenceCountUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,15 +14,11 @@ import org.slf4j.LoggerFactory;
 public class ChargingPileRespHandler extends ChannelInboundHandlerAdapter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ChargingPileRespHandler.class);
-
+    
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         LOGGER.info("设备地址: " + ChannelMap.getRemoteAddress(ctx));
         ChannelMap.getMap().put(ChannelMap.getIpStr(ctx), ctx.channel());
-        ChargingPileMessage<StartChargingReq> message = new ChargingPileMessage<>();
-        StartChargingReq req = new StartChargingReq();
-        message.setBody(req);
-        ChannelMap.getMap().get("10.70.1.120").writeAndFlush(MessageFactory.instance(message));//ctx消息从pipeline尾部流转
     }
 
     @Override
@@ -36,12 +31,19 @@ public class ChargingPileRespHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         ChargingPileMessage message = (ChargingPileMessage) msg;
-
-        switch (ChargingPileEnum.getByValue(message.getType())){
-            case STATUS:
-                ctx.writeAndFlush(buildMessage());
+        try {
+            switch (ChargingPileEnum.getByValue(message.getType())){
+                case STATUS:
+                    LOGGER.info("服务器充电桩状态响应......" + message);
+                    ctx.writeAndFlush(buildMessage());
+                    break;
+                case START:
+                    LOGGER.info("服务器充电桩启动响应......" + message);
+                    break;
+            }
+        } finally {
+            ReferenceCountUtil.release(message);
         }
-        LOGGER.info("Server receive......" + message);
 
     }
 

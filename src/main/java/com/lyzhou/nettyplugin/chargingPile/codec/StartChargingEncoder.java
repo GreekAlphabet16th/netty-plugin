@@ -20,5 +20,6 @@ public class StartChargingEncoder extends MessageToByteEncoder<ChargingPileMessa
         out.writeBytes(req.getDeviceID());
         out.writeByte(req.getMode());
         out.writeShort(req.getPrepayment());
+
     }
 }
